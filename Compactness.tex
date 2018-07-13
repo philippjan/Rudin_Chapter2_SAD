@@ -1,0 +1,167 @@
+\documentclass[10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[ngerman]{babel}
+\usepackage{amsmath,amssymb,amsfonts,amsthm,mathtools,sansmath}
+\usepackage{cleveref}
+\usepackage{framed}
+
+\newenvironment{forthel}{\begin{leftbar}}{\end{leftbar}}
+
+%Commands
+\newcommand{\model}{\mathfrak{M}}
+\newcommand{\claim}{\textsf{Behauptung}:\hspace{0,2cm}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\embed}[2]{ \{ A \text{ open } | \exists O\in #1 .\, A\cap #2 = O\}}
+\newcommand{\capcap}[2]{ \{ O\cap #2 | O \in #1 \}}
+\newcommand{\var}[2]{ #1_{#2}}
+\makeatletter
+\def\fall#1{\forall #1\@ifnextchar\bgroup{\,\fall}{:\,}}
+\makeatother
+%Umgebungen
+\newtheorem{theorem}{Theorem}[section] 
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{signature}[theorem]{Signature}
+\theoremstyle{plain}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{axiom}[theorem]{Axiom}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+\title{Basic Topology: Compactness}
+\author{Philipp Stassen}
+
+\begin{document}
+\maketitle
+
+In this paper we try to formalize parts of the second chapter of the book ''\emph{principles of mathematical analysis}'' by Walter Rudin, which covers \emph{basic topology}, i.e. \emph{point set topology}. The proof checking is carried out by SAD 3.0.
+
+In contrast to other fields of mathematics topology is very naturally built on set theory. As the axioms of set theory are not eligible to be implemented in computers, we will therefore have to carefully choose primitive, '' high-level'' notions and axioms to capture the structural dependencies between notions, that are normally deduced by the axioms of set theory. 
+
+Here \emph{high-level} shall denote notions like ''a real number'' which have by default no intrinsic properties as for example being the \emph{Dedekind-Schnitt} or the like.
+
+Nevertheless, it is benefitial to stay as abstract as possible to eventually formalize more theorems with the same language. Moreover, it is more credible to deduce a theorem from axioms that are not already hypothesizing it. \medskip
+
+We first need to introduce primitve notions to our signature.
+\begin{forthel}
+[cover/-s] [openset/-s] [topology/topologies] [set/sets] 
+[covering/-s] [collection/-s]
+
+Let S denote a set.
+\begin{definition}[Defsubset] 
+	A subset of S is a set.
+\end{definition}
+Let A $\subset$ B stand for A is a subset of B.
+
+\begin{signature}[OpenSet]
+	Let A be a set. A is open is an atom.
+\end{signature}
+
+\begin{signature}[OpenSetOfSet]
+	Let $\var S0$ be a set. Let A $\subset$ $\var S0$. A is open in $\var S0$ is an atom.
+\end{signature}
+Let O denote an open set.
+\begin{definition}[Collection]
+	A collection is a set C such that every element of C is a set.
+\end{definition}
+
+Let C denote a collection.
+
+\begin{signature}[CollectOf]
+	Let S be a set. A collection of S is a collection.
+\end{signature}
+
+\begin{signature}[FiniteColle]
+	Let C be a collection. C is finite is an atom.
+\end{signature}
+
+\begin{signature}[coverRelation]
+	Assume D is a collection. Let S be a set. D covers S is an atom.
+\end{signature}
+
+\begin{signature}[CollecInter]
+	Let C be a collection. Let S be a set. $\capcap{C}{S}$ is a collection of S.
+\end{signature}
+
+\begin{signature}[CollecEmbed]
+	Let S be a set. Let D be a collection of S. $\embed{D}{S}$ is a collection.
+\end{signature}
+\end{forthel}
+Now we can strengthen our theory with axioms. The argument relies on these axioms. There are no intrinsic properties of our notions that might let us deduce some results. 
+\begin{forthel}
+	\begin{definition}[Covering]
+		Let S be a set. A covering of S is a collection D such that D covers S and every element of D is open.
+	\end{definition}
+
+	\begin{definition}[Subcovering]
+		Let S be a set. Let D be a covering of S. A subcovering of S and D is a covering of S.
+	\end{definition}
+	\begin{definition}[CoveringIn]
+		Let S be a set. Let U $\subset$ S. A covering of U in S is a collection D such that D is a collection of S and D covers U and every element of D is open in S.
+	\end{definition}
+
+	\begin{definition}[SubcoveringIn]
+		Let S be a set. Let U $\subset$ S. Let D be a covering of U in S. A subcovering of U and D in S is a covering of U in S.
+	\end{definition}
+	
+	\begin{axiom}[FinCollect1]
+		Assume C is a finite collection. Let S be a set. Let E $\subset$ S. Let C covers E. Then there exists a collection $\var C0$ such that ($\var C0$ is a collection of S and $\var C0$ covers E).
+	\end{axiom}
+	\begin{axiom}[Fincollect2]
+		Assume S is a set. Let E $\subset$ S. Let C be a finite collection of S such that C covers E. There exists a finite collection $\var C0$ such that  $\var C0$ covers E.
+	\end{axiom}
+	\begin{axiom}
+		Let S be a set. Let K $\subset$ S. Let D be a covering of K.
+
+		Then $\capcap{D}{S}$ is a covering of K in S.
+	\end{axiom}
+
+	\begin{axiom}
+		Let S be a set. Let K $\subset$ S. Let D be a covering of K in S.
+		Then $\embed{D}{S}$ is a covering of K.
+	\end{axiom}
+	\begin{axiom}
+		Let S be a set. Let E $\subset$ S. Assume D is a finite covering of E. Then $\capcap{D}{S}$ is a finite covering of E in S.
+	\end{axiom}
+
+	\begin{axiom}[FinCover2]
+		Let S be a set. Let E $\subset$ S. Assume D is a finite covering of E in S. Then $\embed{D}{S}$ is a finite covering of E.
+	\end{axiom}
+\end{forthel}
+
+From here on we can define compact sets and formulate a little theorem.
+\begin{forthel}
+\begin{definition}
+	Let K be a set. 
+	K is compact iff for every collection D ((D is a covering of K) $\rightarrow$ (there exists a finite subcovering of K and D)).
+\end{definition}
+
+\begin{definition}
+	Let S be a set. Let K $\subset$ S. K is compact in S iff for every collection D ((D is a covering of K in S) $\rightarrow$ (there exists a finite subcovering of K and D in S)).
+\end{definition}
+
+\begin{theorem}
+	Let S be a set. Let K $\subset$ S. Then K is compact iff K is compact in S.
+\end{theorem}
+\begin{proof}
+
+	Let us show that (K is compact) $\rightarrow$ (K is compact in S).
+		Assume K is compact. Assume $\var D0$ is a covering of K in S.
+		Take a collection $\var D1$ such that $\var D1$ is a finite subcovering of K and $\embed{\var D0}{S}$.
+		Then $\capcap{\var D1}{S}$ is a finite subcovering of K and $\var D0$ in S.
+		Then K is compact in S.
+	End.
+
+	Let us show that (K is compact in S) $\rightarrow$ (K is compact).
+		Assume K is compact in S. Assume $\var D0$ is a covering of K.
+		Take a collection $\var D1$ such that $\var D1$ is a finite subcovering of K and ($\capcap{\var D0}{S}$) in S.
+		Then $\embed{\var D1}{S}$ is a finite subcovering of K and $\var D0$.
+		Then K is compact.
+	End.
+\end{proof}
+\end{forthel}
+\end{document}
