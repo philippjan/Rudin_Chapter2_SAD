@@ -21,11 +21,11 @@ Axiom NonZeroAddition. Let n be a natural number. For all nonzero natural number
 Axiom PredecessorUniq. For all natural numbers n,m if n + 1 = m + 1 then n = m.
 
 Definition Less. x < y iff there exists a nonzero natural number z such that x + z = y.
-Axiom SmallestZero. For all nonzero natural numbers x 0 < x.
+Lemma SmallestZero. For all nonzero natural numbers x 0 < x.
 
 Lemma Successorgreater. For all natural numbers x x < x + 1.
 
-Lemma Montonicity. Let n,m,x be natural numbers. Let x be nonzero. If n < m then n + x < m + x.
+Lemma Montonicity. Let n,m,x be natural numbers. If n < m then n + x < m + x.
 Proof. Assume n < m.
 Take a nonzero natural number z such that n + z = m. 
 (n + x) + z	.= (n + z) + x (by AssAdd,ComAdd)
@@ -48,7 +48,6 @@ qed.
 Signature InbuiltFortheInductionRelation. m -<- n is an atom.
 Axiom EmbeddingLessIntoInductionRelation. m < n => m -<- n.
 
-#Proving this Lemma is a bit circular as we already assumed "<" to be a wellordering by embedding it into "-<-". The PA Induction Scheme does usually not need "<", here we have no other option...
 Lemma Trichotomy. For all natural numbers x for all natural numbers y x = y or x < y or y < x.
 Proof by induction on x.
 Let x be a natural number.
@@ -64,23 +63,23 @@ end.
 Case x != 0.
 	For all natural numbers a x = a or x < a or a < x.
 	Proof by induction on a.
-	Let y be a natural number.
-		Case y = 0.
-		y < x (by SmallestZero).
+	Let a be a natural number.
+		Case a = 0.
+		a < x (by SmallestZero).
 		end.
-		Case y != 0.
+		Case a != 0.
 		Take m such that m + 1 = x (by NatPredecessor). Then m < x (by Successorgreater).
-		Take n such that n + 1 = y (by NatPredecessor). Then n < y (by Successorgreater).
+		Take n such that n + 1 = a (by NatPredecessor). Then n < a (by Successorgreater).
 			Case m = n.
 			x .= m + 1
 			  .= n + 1
-			  .= y.
+			  .= a.
 			end.
 			Case m < n.
-			Then m + 1 < n + 1 (by MonotonicityOne). Then x < y.
+			Then m + 1 < n + 1 (by MonotonicityOne). Then x < a.
 			end.
 			Case n < m.
-			Then n + 1 < m + 1 (by MonotonicityOne). Then y < x.
+			Then n + 1 < m + 1 (by MonotonicityOne). Then a < x.
 			end.
 		end.
 	qed.
@@ -101,6 +100,8 @@ Definition FiniteSet. Let n be a natural number. Fin(n) = { natural number m | m
 
 Definition Emptyset.
 Let S be a set. S is empty iff for all elements x of S Contradiction.
+
+#or alternatively: iff S has no element.
 
 Let S is nonempty stand for S is not empty.
 
@@ -123,7 +124,7 @@ S ->> T iff there exists a function f such that f is surjective on T and Dom(f) 
 
 Definition FinCardinality. 
 Let S be a set. Let n be a natural number.
-S has cardinality n iff Fin(n) ->> S and for all natural numbers m if m < n then not (Fin(n) ->> S).
+S has cardinality n iff Fin(n) ->> S and for all natural numbers m if m < n then not (Fin(m) ->> S).
 
 Definition SameCardinality.
 Let S be a set. Let T be a set. S and T are gleichmaechtig iff there exists a natural number n such that S has cardinality n and T has cardinality n.
@@ -137,14 +138,16 @@ S <-> T iff there exists a function f such that f is surjective on T and Dom(f) 
 Definition Finiteness. 
 Let S be a set. S is finite iff there exists a natural number n such that S has cardinality n.
 
-########### Show that Notion of Cardinality is senseful.
+########### Show that Notion of Cardinality is senseful. Alles Auskommentierte ist nur durch eine Inkonsistenz in den Annahmen wahr gewesen. Ohne diese Inkonsistenz ist der Beweis der Lemmas deutlich aufwändiger und benötigt noch einiges an Vorbereitung, wenn er denn überhaupt ausführbar ist...
 
 Lemma EmptyFinSet. Fin(0) is empty.
 
-Lemma ProperSubCardinality. Let n be a nonzero natural number. Let S be a set such that S has cardinality n. Let T be a proper subset of S. 
-For all natural numbers m if T has cardinality m then m < n.
+#Lemma ProperSubCardinality. Let n be a nonzero natural number. Let S be a set such that S has cardinality n. Let T be a proper subset of S. 
+#Let m be a natural number such that T has cardinality m. Then m < n.
+#For all natural numbers m if T has cardinality m then m < n.
 
-Lemma CardIsBijection. Let S be a set. Let n be a natural number such that S has cardinality n. Then Fin(n) <-> S.
+#Lemma CardIsBijection. Let S be a set. Let n be a natural number such that S has cardinality n. Then Fin(n) <-> S.
+#Proof. 
 
 Lemma TildeRefl. Let S be a finite set. Then S ~ S.
 
@@ -152,14 +155,14 @@ Lemma TildeSymm. Let S, T be finite sets. If S ~ T then T ~ S.
 
 Lemma TildeTrans. Let S,T,U be finite sets. If S~T and T~U then S~U.
 
-Lemma FiniteUnion. Let S be a finite set such that every element of S is finite. Then \bigcup S is finite.
+#Lemma FiniteUnion. Let S be a finite set such that every element of S is finite. Then \bigcup S is finite.
 
-Lemma IntersectionIsSubset. Let S be a set such that every element of S is a set.
-For all elements T of S \bigcap S \subset T.
+#Lemma IntersectionIsSubset. Let S be a set such that every element of S is a set.
+#For all elements T of S \bigcap S \subset T.
 
-Lemma FiniteSubset. Let S be a set such that S is finite. Let T be a subset of S. T is finite.
-
-Lemma FiniteIntersection. Let S be a finite set such that every element of S is finite. Assume that S is nonempty. Then \bigcap S is finite.
+#Lemma FiniteSubset. Let S be a set such that S is finite. Let T be a subset of S. T is finite.
+#
+#Lemma FiniteIntersection. Let S be a finite set such that every element of S is finite. Assume that S is nonempty. Then \bigcap S is finite.
 	
 ############# The Infinite: Sequences, Countability
 Definition NAT. NAT = { a | a is a natural number}.
