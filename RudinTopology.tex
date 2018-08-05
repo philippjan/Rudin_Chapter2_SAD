@@ -2,7 +2,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
-\usepackage[ngerman]{babel}
+\usepackage[english]{babel}
 \usepackage{amsmath,amssymb,amsfonts,amsthm,mathtools,sansmath}
 \usepackage{cleveref}
 \usepackage{framed}
@@ -37,7 +37,7 @@
 \author{Philipp Stassen}
 \begin{document}
 \maketitle
-In this paper we try to formalize the first three pages (page 24, 25, 26) of the Chapter ''Basic Topology'' of Walter Rudin's ''\emph{principles of mathematical analysis}''. 
+In this paper we formalize the first three pages (page 24, 25, 26) of the Chapter ''Basic Topology'' of Walter Rudin's ''\emph{principles of mathematical analysis}''. 
 This formal text shall then be verified by SAD 3.0, which itself utilizes the eprover to carry out proof tasks.
 
 We would like to stick with the formulations in the book. This is however not always possible as we might adjust certain phrases to assist the automated deduction. It is furthermore necessary to specify certain details that are usually left implicit.
@@ -123,13 +123,13 @@ This axiomatization allows us to prove the following lemmas.
 		Then $n+m$ is a nonzero natural number such that $x+(n+m)=z$ (by NonZeroAddition). Then $x<z$ (by Less).
 	\end{proof}
 \end{forthel}
-We would like to include an induction scheme to prove theorems by induction on the natural numbers. Therefore, we make use of the built in -<- relation. By ''embedding '' the $<$ relation into the $-<-$ relation we can use recursion and induction on $<$ as for $-<-$. At this point we automatically enrich our theory by the axiom that $<$ is well-founded.
+We would like to include an induction scheme to prove theorems by induction on the natural numbers. Therefore, we make use of the built in $\prec$ relation. By ''embedding '' the $<$ relation into the $\prec$ relation we can use recursion and induction on $<$ as for $\prec$. At this point we automatically enrich our theory by an axiom scheme that presupposes the well-foundedness of $<$.
 \begin{forthel}
 	\begin{signature}[InbuiltFortheInductionRelation] 
-	$m -<- n$ is an atom.
+	$m \prec n$ is an atom.
 	\end{signature}
 	\begin{axiom}[EmbeddingLessIntoInductionRelation] 
-	$m < n \Rightarrow m -<- n$.
+	$m < n \Rightarrow m \prec n$.
 	\end{axiom}
 \end{forthel}
 Now we can prove the ''trichotomy'' of the $<$ - relation by induction. 
@@ -137,46 +137,46 @@ Now we can prove the ''trichotomy'' of the $<$ - relation by induction.
 	\begin{lemma}
 		For all natural numbers $x$ for all natural numbers $y$ $x=y$ or $x<y$ or $y<x$.
 	\end{lemma}
-	\begin{proof}[proof by induction on x]
-		Let x be a natural number.\\
-		\textbf{case} $x=0$. Let y be a natural number. \\
-		\textbf{case} $y=0$. \\
+	\begin{proof}[Proof by induction on x]
+		Let $x$ be a natural number.\\
+		\textbf{Case} $x=0$. Let $y$ be a natural number. \\
+		\textbf{Case} $y=0$. \\
 			$x .= 0 .= y$. end. \\
-		\textbf{case} $y$ is nonzero. \\
+		\textbf{Case} $y$ is nonzero. \\
 		$x<y$ (by SmallestZero) end. \\
 		end. \\
-		\textbf{case} $x \neq 0$. \\
+		\textbf{Case} $x \neq 0$. \\
 		For all natural numbers $a$ $x=a$ or $x<a$ or $a<x$.
-		\begin{proof}[proof by induction on a]
-			Let a be a natural number. \\
-			\textbf{case} $a=0$. \\
+		\begin{proof}[Proof by induction on a]
+			Let $a$ be a natural number. \\
+			\textbf{Case} $a=0$. \\
 			$a<x$ (by SmallestZero). end. \\
-			\textbf{case} $a\neq 0$. \\
+			\textbf{Case} $a\neq 0$. \\
 			Take $m$ such that $m+1=x$ (by NatPredecessor). Then $m<x$ (by Successorgreater). \\
 			Take $n$ such that $n+1=a$ (by NatPredecessor). Then $n<a$ (by Successorgreater). \\
-			\textbf{case} $m=n$. \\
+			\textbf{Case} $m=n$. \\
 			\begin{align*}
 				x &.= m+1 \\
 				  &.= n+1 \\
 				  &.= a.
 			\end{align*}
 			end. \\
-			\textbf{case} $m<n$.\\
+			\textbf{Case} $m<n$.\\
 			Then $m+1 < n +1$ (by MonotonicityOne). Then $x<a$. end. \\
-			\textbf{case} $n<m$. \\
+			\textbf{Case} $n<m$. \\
 			Then $n+1 < m+1$ (by MonotonicityOne). Then $a<x$. end. \\
 			end.
 		\end{proof}
 		end.
 	\end{proof}
 \end{forthel}
-Now where we defined a the natural numbers we can define a notion of finiteness that is similar to the one that Walter Rudin defines at the begin of chapter two.
+Now that we defined the natural numbers we can define a notion of finiteness that is similar to the one that Walter Rudin defines at the beginning of chapter two.
 \begin{forthel}
 	\begin{definition}[Subset]
 		Let $T$ be a set. A subset of $T$ is a set $S$ such that every element of $S$ is an element of $T$.
 	\end{definition}
 	\begin{definition}[Complement]
-		Let $M,N$ be sets. $M/N = \{x \text{ in }M | \text{ x is not an element of }N\}$.
+		Let $M,N$ be sets. $M\setminus N = \{x \text{ in }M | x \text{ is not an element of }N\}$.
 	\end{definition}
 	Let $S\subset T$ stand for $S$ is a subset of $T$.
 	\begin{definition}
@@ -213,9 +213,9 @@ Now where we defined a the natural numbers we can define a notion of finiteness 
 		$S$ has cardinality $n$ iff $\Fin(n) \twoheadrightarrow S$ and for all natural numbers $m$ if $m<n$ then not $(\Fin(m) \twoheadrightarrow S$.
 	\end{definition}
 	\begin{definition}
-		Let $S$ be a set. Let $T$ be a set. $S$ and $T$ are gleichmaechtig iff there exists a natural number $n$ such that $S$ has cardinality $n$ and $T$ has cardinality $n$.
+		Let $S$ be a set. Let $T$ be a set. $S$ and $T$ are equipotent iff there exists a natural number $n$ such that $S$ has cardinality $n$ and $T$ has cardinality $n$.
 	\end{definition}
-	Let $S\sim T$ stand for $S$ and $T$ are gleichmaechtig.
+	Let $S\sim T$ stand for $S$ and $T$ are equipotent.
 	\begin{definition}
 		Let $S,T$ be sets. \\
 		$S \leftrightarrow T$ iff there exists a function $f$ such that $f$ is surjective on $T$ and $Dom(f) = S$ and $f$ is injective.
@@ -224,7 +224,7 @@ Now where we defined a the natural numbers we can define a notion of finiteness 
 		Let $S$ be a set. $S$ is finite iff there exists a natural number $n$ such that $S$ has cardinality $n$.
 	\end{definition}
 \end{forthel}
-It is unclear wether this notion of finiteness is senseful. It might be to complicated to utilize for the prover. Simple properties as the fact that $\sim$ is an equivalence relation can already be verified.
+It is unclear whether this notion of finiteness is sensible. It might be to complicated for the prover. Simple properties as the fact that $\sim$ is an equivalence relation can however be verified.
 \begin{forthel}
 	\begin{lemma}
 		Let $S$ be a finite set. Then $S \sim S$.
@@ -263,15 +263,15 @@ This notion of countability allows us to prove that every subset of a countable 
 	\begin{proof}
 		Assume $M$ is countable. Take a list $f$ of $M$. Let $N$ be a subset of $M$ that has an element. Define \\
 		$g[n] = $ \\
-		\hspace*{1em}\textbf{Case} $((M/(f << n))$ has an element) -> Choose an element a of $(M/(f << n))$ that is smallest with respect to f and M in $(M/(f << n))$ in a, \\
-		\hspace*{1em}\textbf{Case} $((M/(f<<n))$ has no element) -> Choose an element a of N in a \\
+		\hspace*{1em}\textbf{Case} $((M\setminus (f << n))$ has an element) -> Choose an element a of $(M\setminus (f << n))$ that is smallest with respect to f and M in $(M\setminus(f << n))$ in a, \\
+		\hspace*{1em}\textbf{Case} $((M\setminus(f<<n))$ has no element) -> Choose an element a of N in a \\
 		for $n$ in $\N$.
 		\begin{proof}
 			Choices.
 		\end{proof}
 	\end{proof}
 \end{forthel}
-\section{Concluding Remarks} The SAD 3.0 seems to be capable to deal with very basic notions like natural numbers, functions and sets and more complex derived notions like cardinalities or lists. However, complex notions like the finiteness of sets will be difficult to use and require a lot of preparations. Therefore, it seems more reasonable to use a primitive notion of finiteness rather than a derived one. 
+\section{Concluding Remarks} SAD 3.0 seems to be capable to deal with basic notions like natural numbers, functions and sets and more complex derived notions like cardinalities or lists. However, complex notions like the finiteness of sets will be difficult to use and require a lot of preparations. Therefore, it seems more reasonable to use a primitive notion of finiteness rather than a derived one. 
 
-I think that the possibility to define functions by recursion and verify proofs by induction should suffice to work with finiteness as defined in this paper. It might run hardware limitations because of complexity issues.
+I think that the possibility to define functions by recursion and verify proofs by induction should suffice to work with finiteness as defined in this paper. It might run up against hardware limitations because of complexity issues though.
 \end{document}
