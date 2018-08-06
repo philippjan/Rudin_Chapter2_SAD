@@ -15,6 +15,9 @@
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\Fin}{\mathsf{Fin}}
 \newcommand{\Dom}{\mathsf{Dom}}
+\newcommand{\embed}[2]{ \{ A \text{ open } | \exists O\in #1 .\, A\cap #2 = O\}}
+\newcommand{\capcap}[2]{ \{ O\cap #2 | O \in #1 \}}
+\newcommand{\var}[2]{ #1_{#2}}
 \makeatletter
 \def\fall#1{\forall #1\@ifnextchar\bgroup{\,\fall}{:\,}}
 \makeatother
